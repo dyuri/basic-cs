@@ -12,7 +12,7 @@ class ListNode:
         return f"<ListNode: {self.data}>"
 
 
-class LinkedList(List):
+class IterLinkedList(List):
 
     def __init__(self, values = None):
         self.head: Optional[ListNode] = None
@@ -22,7 +22,7 @@ class LinkedList(List):
                 self.add(v)
 
     def __repr__(self):
-        return f"<LinkedList: {self.head} ...>"
+        return f"<IterLinkedList: {self.head} ...>"
 
     # O(n)
     def add(self, data: Any):
@@ -31,21 +31,17 @@ class LinkedList(List):
         # epmty
         if self.head is None:
             self.head = new_node
-
         else:
-            tmp = self.head
+            for node in self.node_iterator: pass
+            node.next = new_node
 
-            while tmp.next is not None:
-                tmp = tmp.next
-
-            tmp.next = new_node
-
-    # O(n) (search) + O(1)
+    # O(n) + O(1)
     def insert_before(self, index, data):
         new_node = ListNode(data)
 
         # empty
         if self.head is None:
+            print("empty")
             self.head = new_node
 
         # new head
@@ -54,22 +50,22 @@ class LinkedList(List):
             self.head = new_node
 
         else:
-            node = self.head
-            while index > 0 and node.next is not None:
-                index -= 1
-                node = node.next
-
-            new_node.next = node.next
-            node.next = new_node
+            prev = self.head
+            for idx, current in enumerate(self.node_iterator):
+                if idx == index:
+                    prev.next = new_node
+                    new_node.next = current
+                    break
+                prev = current
+            else:
+                prev.next = new_node
 
     def _get(self, index):
-        node = self.head
+        for idx, node in enumerate(self):
+            if idx == index:
+                return node
 
-        while index > 0 and node is not None:
-            index -= 1
-            node = node.next
-
-        return node
+        return None
 
     # O(n)
     def get(self, index):
@@ -85,14 +81,9 @@ class LinkedList(List):
 
     # O(n)
     def index_of(self, data):
-        node = self.head
-        pos = 0
-        while node is not None:
-            if node.data == data:
-                return pos
-            pos += 1
-            node = node.next
-
+        for i, el in enumerate(self):
+            if el == data:
+                return i
         return -1
 
     # O(n)
@@ -101,14 +92,11 @@ class LinkedList(List):
         if index == 0 and self.head is not None:
             self.head = self.head.next
         else:
-            node = self.head
-            while node is not None and index > 1:
-                index -= 1
-                node = node.next
-
-            if node is not None:
-                if node.next is not None:
-                    node.next = node.next.next
+            prev = self.head
+            for idx, node in enumerate(self.node_iterator):
+                if idx == index:
+                    prev.next = node.next
+                    break
 
     # O(1)
     def clear(self):
@@ -117,8 +105,8 @@ class LinkedList(List):
     # O(n)
     def reversed(self):
         node = self.head
-        rlist = LinkedList()
-        while node is not None:
+        rlist = IterLinkedList()
+        for node in self.node_iterator:
             newnode = ListNode(node.data)
             if rlist.head:
                 newnode.next = rlist.head
@@ -132,18 +120,19 @@ class LinkedList(List):
     # O(n)
     @property
     def size(self):
-        node = self.head
-        size = 0
-        while node:
-            size += 1
-            node = node.next
+        for idx, node in enumerate(self.node_iterator): pass
+        return idx
 
-        return size
-
-    # O(1) (next element)
     @property
     def iterator(self):
         current = self.head
         while current is not None:
             yield current.data
+            current = current.next
+
+    @property
+    def node_iterator(self):
+        current = self.head
+        while current is not None:
+            yield current
             current = current.next
