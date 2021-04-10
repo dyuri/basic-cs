@@ -24,7 +24,7 @@ class LinkedList(List):
     def __repr__(self):
         return f"<LinkedList: {self.head} ...>"
 
-
+    # O(n)
     def add(self, data: Any):
         # epmty
         if self.head is None:
@@ -38,6 +38,7 @@ class LinkedList(List):
 
             tmp.next = ListNode(data)
 
+    # O(n) (search) + O(1)
     def insert_before(self, index, data):
         new_node = ListNode(data)
 
@@ -69,9 +70,11 @@ class LinkedList(List):
 
         return node
 
+    # O(n)
     def get(self, index):
         return getattr(self._get(index), "data", None)
 
+    # O(n)
     def set(self, index, data):
         node = self._get(index)
         if node:
@@ -79,6 +82,7 @@ class LinkedList(List):
         else:
             raise KeyError("Index out of range.")
 
+    # O(n)
     def index_of(self, data):
         node = self.head
         pos = 0
@@ -90,6 +94,7 @@ class LinkedList(List):
 
         return -1
 
+    # O(n)
     def remove(self, index):
         # head
         if index == 0 and self.head is not None:
@@ -107,6 +112,7 @@ class LinkedList(List):
     def clear(self):
         self.head = None
 
+    # O(n)
     def reversed(self):
         node = self.head
         rlist = LinkedList()
@@ -121,6 +127,7 @@ class LinkedList(List):
 
         return rlist
 
+    # O(n)
     @property
     def size(self):
         node = self.head
@@ -131,6 +138,7 @@ class LinkedList(List):
 
         return size
 
+    # O(1) (next element)
     @property
     def iterator(self):
         current = self.head
