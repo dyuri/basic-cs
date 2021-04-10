@@ -80,20 +80,56 @@ class LinkedList(List):
             raise KeyError("Index out of range.")
 
     def index_of(self, data):
-        pass
+        node = self.head
+        pos = 0
+        while node is not None:
+            if node.data == data:
+                return pos
+            pos += 1
+            node = node.next
+
+        return -1
 
     def remove(self, index):
-        pass
+        # head
+        if index == 0 and self.head is not None:
+            self.head = self.head.next
+        else:
+            node = self.head
+            while node is not None and index > 1:
+                index -= 1
+                node = node.next
+
+            if node is not None:
+                if node.next is not None:
+                    node.next = node.next.next
 
     def clear(self):
-        pass
+        self.head = None
 
     def reversed(self):
-        pass
+        node = self.head
+        rlist = LinkedList()
+        while node is not None:
+            newnode = ListNode(node.data)
+            if rlist.head:
+                newnode.next = rlist.head
+                rlist.head = newnode
+            else:
+                rlist.head = newnode
+            node = node.next
+
+        return rlist
 
     @property
     def size(self):
-        pass
+        node = self.head
+        size = 0
+        while node:
+            size += 1
+            node = node.next
+
+        return size
 
     @property
     def iterator(self):
